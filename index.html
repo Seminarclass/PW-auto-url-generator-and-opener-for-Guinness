@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL List Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button + button {
+      margin-left: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>URL List Generator</h2>
+    <p>Enter the URL pattern:</p>
+    <input type="text" id="urlPattern" value="https://www.namecheap.com/hosting/purchase/domain-connection/?product=stellar-business&addons=server-location%3Bserver-location-us&duration=1&durationtype=year&domain=Myfirstworldrecords" />
+    
+    <p>Enter the starting number:</p>
+    <input type="number" id="startingNumber" placeholder="Enter the starting number" />
+    
+    <p>Enter the ending number:</p>
+    <input type="number" id="endingNumber" placeholder="Enter the ending number" />
+    
+    <button onclick="generateLinks()">Generate Links</button>
+    <button onclick="startAutoOpen()">Start Auto Open</button>
+
+    <p>Generated Links:</p>
+    <ul id="linkList">
+      <!-- Generated links will be displayed here -->
+    </ul>
+  </div>
+
+  <script>
+    let generatedLinks = [];
+    let currentLinkIndex = 0;
+    let autoOpenInterval;
+
+    function generateLinks() {
+      const urlPattern = document.getElementById("urlPattern").value;
+      const startingNumber = document.getElementById("startingNumber").value;
+      const endingNumber = document.getElementById("endingNumber").value;
+      const linkList = document.getElementById("linkList");
+      linkList.innerHTML = ""; // Clear previous links
+      generatedLinks = []; // Clear previous generated links
+
+      for (let i = parseInt(startingNumber); i <= parseInt(endingNumber); i++) {
+        const linkUrl = `${urlPattern}${i}.pw&domainType=new`;
+        generatedLinks.push(linkUrl); // Store generated links
+        const listItem = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = linkUrl;
+        link.textContent = `Link ${i}`;
+        listItem.appendChild(link);
+        linkList.appendChild(listItem);
+      }
+    }
+
+    function startAutoOpen() {
+      if (generatedLinks.length === 0) {
+        alert("Generate links first.");
+        return;
+      }
+
+      currentLinkIndex = 0;
+      autoOpenInterval = setInterval(openNextLink, 1000); // Change interval as needed
+    }
+
+    function openNextLink() {
+      if (currentLinkIndex < generatedLinks.length) {
+        window.open(generatedLinks[currentLinkIndex], "_blank");
+        currentLinkIndex++;
+      } else {
+        clearInterval(autoOpenInterval);
+      }
+    }
+  </script>
+</body>
+</html>
